@@ -17,8 +17,9 @@ class SubscriberFactory extends Factory
     public function definition(): array
     {
         return [
+            'email_list_id' => \App\Models\EmailList::factory(), // Cria uma lista automaticamente se não for passada uma
             'name' => fake()->name,
-            'email' => fake()->email
+            'email' => fake()->unique()->safeEmail,
         ];
     }
 }
