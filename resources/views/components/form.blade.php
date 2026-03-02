@@ -8,7 +8,9 @@
 @endphp
 
 <form {{ $attributes->merge(['class' => 'flex flex-col gap-4']) }} method="{{ $method }}">
-    @csrf
+    @if ($method != 'GET')
+        @csrf
+    @endif
 
     {{ $slot }}
 </form>

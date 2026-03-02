@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
         ->name('email-list.create');
     Route::post('/email-list/store', [EmailListController::class, 'store'])
         ->name('email-list.store');
+    Route::get('/email-list/{list}/view', [EmailListController::class, 'create'])
+        ->name('email-list.view-list');
 });
 
 require __DIR__ . '/auth.php';
