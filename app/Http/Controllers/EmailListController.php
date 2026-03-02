@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EmailList;
 use Illuminate\Http\Request;
+use PHPUnit\TextUI\Configuration\FileCollection;
 
 class EmailListController extends Controller
 {
@@ -20,7 +21,7 @@ class EmailListController extends Controller
      */
     public function create()
     {
-        //
+        return view('email-list.create');
     }
 
     /**
@@ -28,7 +29,36 @@ class EmailListController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request -> validate([
+           'title' =>  ['required', 'max:255'],
+           'file' => ['required', 'file', 'mimes:csv,txt']
+        ]);
+
+        $file = $request->file('file');
+        $fileHandler = fopen($file->getRealPath() ,'r');
+        $items = [];
+
+        while(($row = fgetcsv($fileHandler,null,',')) !== false){
+            if($row[0] == 'Name' || $row[1] == 'Email') {
+                continue;
+            }
+            
+            $items[] = [
+                'name' => $row[0],
+                'email' => $row[1]
+            ];
+        }
+
+        fclose($fileHandler);
+
+        $emailList = EmailList::query()->create([
+            'title' => $request->title,
+        ]);
+            
+        $emailList->subscribers()->createMany($items);
+        
+
+        return to_route('email-list.index');
     }
 
     /**

@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     
                     @forelse ( $emailLists as $list)
-                        
+                       <x-Linkbutton >{{ $list->title }}</x-Linkbutton> 
                     @empty
 
                         <div class="flex justify-center">
